@@ -1,0 +1,31 @@
+Git's famous “ERROR: Permission to .git denied to user”
+
+After Googling for few days, i found this is the only one question are similar to my situations.
+
+Someday i just solved the problem!
+
+I think i have to write down my answer here to help the incoming searches.
+
+Here is what i did:
+
+Open "Keychain Access.app" (You can find it in Spotlight or LaunchPad)
+Select "All items" in Category
+Search "git"
+Delete every old & strange items
+Try to Push again and it just WORKED
+shareedit
+edited Dec 10 '15 at 18:59
+answered Jun 23 '15 at 14:07
+
+spyar
+698167
+4	 	
+Thumbs up buddy. You're a hero. – Prince Bansal Nov 26 '15 at 2:06
+  	 	
+Glad I decided to google this instead of following the lack of detail on github's support page – ivandov Jul 12 '16 at 2:37
+  	 	
+Thanks,I ended up here and removing SourceTree account. – Zaid Pathan Nov 25 '16 at 11:30
+  	 	
+Hell yes, finally, after struggling with countless SSH keys, this is the answer that worked! Seems that Mac and https access uses the Keychain. Crazy. – Patrick Chu Nov 27 '16 at 19:30 
+  	 	
+Thanks! I'm using two differents accounts (work and personal), is it supposed that I have to do this everytime I'm pushing? I mean, it works but it's just annoying. – Angie Alejo Nov 30 '16 at 19:13
