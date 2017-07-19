@@ -1,0 +1,1 @@
+mvn archetype:generate -DarchetypeGroupId=org.richfaces.archetypes -DarchetypeArtifactId=richfaces-archetype-simpleapp -DarchetypeVersion=4.2.2.Final -DgroupId=org.docs.richfaces -DartifactId=new_project

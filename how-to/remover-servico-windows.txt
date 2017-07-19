@@ -1,0 +1,5 @@
+Remover um serviço do Windows
+
+Utilize o seguinte comando:
+
+sc delete [Nome do Serviço]

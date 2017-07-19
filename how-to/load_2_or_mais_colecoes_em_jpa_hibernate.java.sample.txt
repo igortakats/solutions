@@ -1,0 +1,39 @@
+@SuppressWarnings("unchecked")
+	@Override
+	public final List<Guia> obterGuiasPorNumeroGuia(String numeroGuia, Boolean excluido) {
+		
+		StringBuilder sql = new StringBuilder();
+		
+		List<Guia> listGuias = null;
+		
+		sql.append("select g from Guia g ");
+		sql.append("join fetch g.guiasRecebimento gr "); // há a necessidade do carregamento da Colecao de guiasRecebimento e guiasRemocao
+		                                                 // contudo apenas uma das colecoes podem ser carregadas em uma única query. Abaixo
+		                                                 // segue o meio encontrado para solução desse problema - Veja a marca WORKAROUND
+		sql.append("where g.numeroGuia = :numeroGuia ");
+		
+		if (excluido != null) {
+			sql.append(" and g.excluido = :excluido ");
+		}
+		
+		sql.append("order by g.seqNumeroGuia");
+		
+		Query query = em.createQuery(sql.toString());
+		
+		query.setParameter("numeroGuia", numeroGuia);
+		
+		if (excluido != null) {
+			query.setParameter("excluido", excluido);
+		}
+		
+		listGuias = (List<Guia>)query.getResultList();
+		
+//		WORKAROUND: esta segunda query esta sendo executada devido a incapacidade do JPA/Hibernate
+//		carregarem em uma mesma query duas colecoes do tipo BAG
+		for (Guia g : listGuias) {
+		  	query = em.createQuery("select g.guiasRemocao from Guia as g");  
+		    g.setGuiasRemocao(query.getResultList());  
+		}		
+
+		return listGuias;
+	}

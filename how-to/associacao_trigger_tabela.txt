@@ -1,0 +1,9 @@
+-- Trigger: aud_guiaremocao on guiaremocao
+
+-- DROP TRIGGER aud_guiaremocao ON guiaremocao;
+
+CREATE TRIGGER aud_guiaremocao
+  AFTER INSERT
+  ON guiaremocao
+  FOR EACH ROW
+  EXECUTE PROCEDURE aud_update_guiaremocao();

@@ -1,0 +1,5 @@
+
+#colocque as linhas abaixo de JVM arguments
+-Dhttp.proxyHost=10.1.6.91
+-Dhttp.proxyPort=80
+-Dhttp.nonProxyHosts="*10.*|localhost|127.0.*"

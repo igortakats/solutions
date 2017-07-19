@@ -1,0 +1,29 @@
+Configuracao do JBOSS para indicar qual GRTP_HOME sera utilizada pelo SGRTP
+===========================================================================================================
+
+Eh importante observar que a HOME default to GRTP eh GRTP_HOME, portanto a configuracao abaixo nao eh necessaria
+caso seja utilizada a Home Default.
+
+Windows:
+
+
+
+2. Ao final do arquivo antes do paragrafo RESTART insira as seguintes linhas:
+
+rem ##########################################################################################
+rem Igor - customizacao para indicacao da HOME a ser utilizada pelo grtp
+
+set "JAVA_OPTS=%JAVA_OPTS% -DgrtpHome=GRTP_HOME_xxxxxx"
+
+============================================================================================================
+
+Linux:
+
+
+2. Ao final do arquivo antes do comentario "Display our environment" insira as seguintes linhas:
+
+rem ##########################################################################################
+rem Igor - customizacao para indicacao da HOME a ser utilizada pelo grtp
+
+JAVA_OPTS="$JAVA_OPTS -DgrtpHome=GRTP_HOME_xxxxxx"
+export JAVA_OPTS

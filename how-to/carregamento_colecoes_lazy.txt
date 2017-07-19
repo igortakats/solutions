@@ -1,0 +1,38 @@
+	public Collection<UnidadePrisional> listaUPSRelacionadas(Integer id, List<String> idsExcecao) {
+
+		
+		// TODO: implementar cláusula NOT IN na query abaixo (Igor)
+		String criterio = "SELECT coord FROM Coordenadoria coord LEFT JOIN FETCH coord.listUnidadePrisional WHERE coord.id = :id";
+		
+		Collection<UnidadePrisional> listUPTMP = new ArrayList<UnidadePrisional>();
+		Collection<UnidadePrisional> listUP;
+
+		Query query = em.createQuery(criterio);
+		
+		query.setParameter("id", id);
+
+		try {
+			listUP = ((Coordenadoria)query.getSingleResult()).getListUnidadePrisional();
+		} catch (NoResultException e) {
+			return listUPTMP;
+		}
+		
+		boolean hasRestriction = false;
+		
+		for(UnidadePrisional up : listUP) {
+			
+			hasRestriction = false;
+			
+			for (String i : idsExcecao) {
+				if (up.getId().equals(Integer.parseInt(i))) {
+					hasRestriction = true;
+					break;
+				}
+			}
+			
+			if (!hasRestriction) {
+				listUPTMP.add(up);
+			}
+		}
+		
+		return listUPTMP;

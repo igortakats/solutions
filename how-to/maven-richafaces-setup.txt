@@ -1,0 +1,45 @@
+The details for the JBoss repository need to be added to Maven so it can access the archetype. 
+Add a profile in the maven_installation_folder/conf/settings.xml file under the <profiles> element:  
+
+Under <profiles>
+
+    <profile>
+        <id>jboss-public-repository</id>
+        <repositories>
+            <repository>
+                <id>jboss-public-repository-group</id>
+                <name>JBoss Public Maven Repository Group</name>
+                <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+                <layout>default</layout>
+                <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                </snapshots>
+            </repository>
+        </repositories>
+        <pluginRepositories>
+            <pluginRepository>
+                <id>jboss-public-repository-group</id>
+                <name>JBoss Public Maven Repository Group</name>
+                <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+                <layout>default</layout>
+                <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                </snapshots>
+            </pluginRepository>
+        </pluginRepositories>
+	</profile>
+	
+Após </profiles> colocar as linhas abaixo:
+   <activeProfiles>
+	<activeProfile>jboss-public-repository</activeProfile>
+   </activeProfiles>

@@ -1,0 +1,19 @@
+JVM Encoding setup:
+
+To change the default encoding of the JVM follow the above instructions below:
+
+Windows:
+======== 
+Edit the file standalone.conf.bat under the directory [JBOSS installation]\bin\ and put the following instructions:
+
+rem # Override default character encoding from Cp1252 to UTF-8 Costumization for GRTP
+set "JAVA_OPTS=%JAVA_OPTS% -Dfile.encoding=UTF-8"
+set "JAVA_OPTS=%JAVA_OPTS% -Dsun.jnu.encoding=UTF-8
+
+Linux:
+======
+Edit the file standalone.conf under the directory [JBOSS installation]\bin\ and put the following instructions:
+
+# Override default character encoding from Cp1252 to UTF-8
+JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF-8"
+JAVA_OPTS="$JAVA_OPTS -Dsun.jnu.encoding=UTF-8"

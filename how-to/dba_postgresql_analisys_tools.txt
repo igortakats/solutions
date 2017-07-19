@@ -1,0 +1,26 @@
+PARA ATIVAR AS ESTATISTICAS DE EXECUCAO DE QUERIES
+================================================================================
+
+1. PROCESSAR A SEGUINTE QUERY:
+	
+	create extension pg_stat_statements;
+	
+2. EM postgresql.conf adicionar a seguinte configuracao:
+
+	create extension pg_stat_statements;
+	
+3. Parar e reiniciar o serviço postgresql.
+
+
+Para listar as queries com maior tempo de execucao:
+==================================================================================
+
+1. Listar estatisticas:
+	
+	select userid, dbid, queryid, query, total_time from pg_stat_statements order by total_time desc;
+	
+2. Reset de estatisticas:
+
+	select pg_stat_reset();      e
+	select pg_stat_statements_reset();	
+			

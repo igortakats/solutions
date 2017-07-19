@@ -1,0 +1,13 @@
+Incluir seguinte linha no arquivo eclipse.ini após -vmargs, no diretorório do Eclipse:
+
+-Dfile.encoding=ISO-8859-1
+
+Obs. Essa linha tornará o encodding-setting default padrão.
+
+
+Verificar se os projetos possuem o encodding padrão do seguinte modo.
+
+1. Abra as propriedade do projeto.
+
+2. Já na primeira tela verifique se o projeto possue o encodding padráo
+   definido anteriormente, se não estiver selecione "Inherited from container".

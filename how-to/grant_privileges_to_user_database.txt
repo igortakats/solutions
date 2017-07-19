@@ -1,0 +1,23 @@
+-- Gera scripts com Grants para objetos de banco de dados a partir de tabelas do POSTGRES
+SELECT 'GRANT all privileges ON ' || relname || ' TO usugrtp;' FROM pg_statio_all_sequences WHERE schemaname = 'public';
+SELECT 'GRANT all privileges ON ' || relname || ' TO usugrtp;' FROM pg_statio_all_tables WHERE schemaname = 'public';
+SELECT 'GRANT all privileges ON ' || relname || ' TO usugrtp;' FROM pg_statio_all_indexes WHERE schemaname = 'public';
+SELECT 'GRANT all privileges ON ' || viewname || ' TO usugrtp;' FROM pg_views WHERE schemaname = 'public' and viewname like '%vw_%';
+
+-- Processar os selects como abaixo:
+psql -h localhost -U postgres -c "SELECT 'GRANT all privileges ON ' || relname || ' TO usugrtp;' FROM pg_statio_all_sequences WHERE schemaname = 'public';" -e dbgrtp >> /c/tmp/grant_sequences.sql
+psql -h localhost -U postgres -c "SELECT 'GRANT all privileges ON ' || relname || ' TO usugrtp;' FROM pg_statio_all_tables WHERE schemaname = 'public';" -e dbgrtp >> /c/tmp/grant_tables.sql
+psql -h localhost -U postgres -c "SELECT 'GRANT all privileges ON ' || indexrelname || ' TO usugrtp;' FROM pg_statio_all_indexes WHERE schemaname = 'public';" -e dbgrtp >> /c/tmp/grant_indexes.sql
+psql -h localhost -U postgres -c "SELECT 'GRANT all privileges ON ' || viewname || ' TO usugrtp;' FROM pg_views WHERE schemaname = 'public' and viewname like '%vw_%';" -e dbgrtp >> /c/tmp/grant_views.sql
+
+-- Privilege Grants to all objects of a certain database and user:
+revoke all privileges on database dbgrtp from usugrtp;
+grant all privileges on database dbgrtp to usugrtp;
+
+views: select viewname from pg_views where viewname like '%vw_%';
+trigger functions: select tgname from pg_trigger where tgname like '%aud_%';
+
+SELECT relname, schemaname FROM pg_statio_all_sequences WHERE schemaname = 'public';
+SELECT relname, schemaname  FROM pg_statio_all_tables WHERE schemaname = 'public';
+SELECT relname, schemaname  FROM pg_statio_all_indexes WHERE schemaname = 'public';
+SELECT viewname, schemaname, viewowner FROM pg_views WHERE schemaname = 'public' and viewname like '%vw_%';

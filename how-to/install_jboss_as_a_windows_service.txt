@@ -1,0 +1,63 @@
+Configuring the Service
+===========================================================================================================
+
+Ensure you have administrator access to the Windows server on which JBoss is installed, and that you have a text editor that supports 
+search and replace (such as Notepad). It is also handy, although not required, for the server to have unrestricted web access.
+
+Procedure
+
+Complete these steps:
+
+1.    	On the WWW.JBOSS.ORG/JBOSSWEB/DOWNLOADS web site, search for the current packages of the "Jboss Web Native Connectors", and download 
+		the binaries appropriate for the Windows operating system you are using. For example, if the current package is at release 2.0.10, 
+		then download the zip file for binaries 2.0.10-windows x64.
+
+2.    	Unzip the downloaded archive file to the JBoss root directory. For example:
+
+        C:\jboss-as-7.1.1.Final
+
+      	If prompted to do so, overwrite any existing files with the same names.
+
+3.    	Use your text editor to open the service.bat file under the <JBOSS_ROOT>\bin directory. Save a copy of the file as service.old so you 
+		have a backup.
+
+4.    	Set the SVCNAME, SVCDISP and SVCDESC properties to something meaningful. For example:
+
+        set SVCNAME=JBoss7server
+        set SVCDISP=JBoss Server for CSP release X
+        set SVCDESC=JBoss AS 7.1.1.Final - Windows x64 - CSP release X
+
+5.		Comment out the JAVA_OPTS property by adding REM to the beginning of the line. For example:
+
+        REM set JAVA_OPTS=-X
+
+6.    	Replace all occurrences of run.bat with standalone.bat.
+
+7.    	Replace all occurrences of run.log with standalone.log.
+
+8.    	Replace all occurrences of the command
+
+        	call shutdown -S < .s.lock >> shutdown.log 2>&1
+
+  		with this command
+
+        	call jboss-cli.bat --connect --command=:shutdown >> shutdown.log 2>&1
+
+9.	    Save the modified service.bat file.
+
+10.	    Launch the Windows command line and execute the following command to install and register the "JBoss Server for CSP release X" service:
+
+        service.bat install
+
+11.    Open Server Manager > Configuration > Services and verify that the "JBoss Server for CSP release X" service was registered.
+
+12.    (Optional) Change the Startup Type for this service to Automatic.
+
+13.    Start the "JBoss Service for CSP release X" service.
+
+14.    Check the log file <JBOSS_ROOT>\bin\standalone.log to verify that the JBoss server started up successfully.
+
+
+Complemento de configuracao por Igor:
+=======================================
+		Alterar as permissoes de seguranca das pastas log e deploy de modo que ambas tenham permissao de gravacao.

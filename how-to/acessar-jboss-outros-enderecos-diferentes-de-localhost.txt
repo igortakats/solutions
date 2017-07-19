@@ -1,0 +1,5 @@
+Quando houver a necessidade de acessar uma aplicacao no JBoss de outra m�quina 
+inclua parametro ... -b [IP da maquina onde o JBoss estah instalado], de acordo
+com o exemplo abaixo:
+
+nohup ./standalone.sh -b 10.72.250.184 --server-config=standalone.xml &

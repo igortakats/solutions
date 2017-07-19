@@ -1,0 +1,21 @@
+
+### EJB Definition
+@Stateless(name="calculator")
+@Remote(CalculatorRemote.class)
+@Local(CalculatorLocal.class)
+public class CalculatorBean implements CalculatorRemote, CalculatorLocal
+{
+...
+
+### EJB Injected
+
+private CalculatorLocal calculator;
+
+/**
+ * Injecting the EJB
+ */
+@EJB(name = "calculator")
+public void setCalculator(CalculatorLocal calculator)
+{
+   this.calculator = calculator;
+}

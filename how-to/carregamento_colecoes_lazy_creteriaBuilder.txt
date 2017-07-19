@@ -1,0 +1,23 @@
+###############################################################################################################
+Usando Criteria:
+
+
+CriteriaQuery<Dept> d = cb.createQuery(Dept.class);
+
+Root<Dept> deptRoot = d.from(Dept.class);
+
+deptRoot.fetch("employeeCollection", JoinType.LEFT);
+
+d.select(deptRoot);
+
+List<Dept> dList = em.createQuery(d).getResultList();
+
+
+Corresponding SQL: SELECT * FROM dept d, employee e  WHERE d.id = e.deptId
+
+
+##############################################################################################################
+
+Usando JPQL:
+
+SELECT preso FROM Preso preso LEFT JOIN FETCH preso.listTransferencia WHERE preso.id = :id

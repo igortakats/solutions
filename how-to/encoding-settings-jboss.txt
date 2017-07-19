@@ -1,0 +1,18 @@
+Change the default encoding settings of the JVM in JBoss Application Server
+===========================================================================
+
+By default when the JVM is started, the default encoding of all parameters 
+is Cp1252. To change this value insert the lines below in the file standalone.conf.bat (Windows) 
+or standalone.conf.sh (linux):
+
+Windows:
+========
+rem # Override default character encoding from Cp1252 to Customization for GRTP
+set "JAVA_OPTS=%JAVA_OPTS% -Dfile.encoding=UTF-8"
+set "JAVA_OPTS=%JAVA_OPTS% -Dsun.jnu.encoding=UTF-8
+
+Linux:
+======
+# Override default character encoding from Cp1252 to UTF-8
+JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF-8"
+JAVA_OPTS="$JAVA_OPTS -Dsun.jnu.encoding=UTF-8"

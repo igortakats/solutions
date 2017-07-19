@@ -1,0 +1,16 @@
+1. renomeie o arquivo standalone.xml para standalone.min.xml
+
+2. renomeie o arquivo standalone.full.xml para standalone.xml
+
+3. Edite o arquivo standalone.xml e inclua as seguintes linhas 
+   entre as tags <jms-destinations> </jms-destinations>:
+
+<jms-queue name="testMailQueue">
+     <entry name="queue/mail"/>
+     <entry name="java:jboss/exported/jms/queue/mail"/>
+</jms-queue>
+
+<jms-queue name="testReportQueue">
+     <entry name="queue/report"/>
+     <entry name="java:jboss/exported/jms/queue/report"/>
+</jms-queue>

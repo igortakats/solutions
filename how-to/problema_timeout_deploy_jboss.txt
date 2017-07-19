@@ -1,0 +1,17 @@
+Quando for identificado o erro de TimeOut no deploy da aplicação no JBoss, faça o seguinte:
+
+1.  Edite o arquivo standalone.xml na pasta [jboss instalation path]/standalone/configuration
+
+2.  Procure pelas seguintes linhas:
+
+	<subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" />
+        </subsystem>
+
+3.  Inclua a propriedade deployment-timeout para um valor maior que 60 (default do JBoss) conforme exemplo abaixo:
+		
+	<subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="240"/>
+        </subsystem>                
+        
+4.  Reinicie o JBoss.        

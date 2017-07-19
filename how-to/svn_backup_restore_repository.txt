@@ -1,0 +1,5 @@
+### BACKUP DE REPOSITORIO ###
+svnadmin dump c:\repositories\sap > c:\igor\svn-sap.20170105.dmp
+
+### RESTORE DE REPOSITORIO ###
+svnadmin load C:\Users\ivanoff\repositories\sap < c:\igor\svn-sap.20170105.dmp

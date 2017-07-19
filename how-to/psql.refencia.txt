@@ -1,0 +1,16 @@
+Conectar psql
+==================================================================
+psql -h localhost -U postgres grtp
+
+\d - lista as tabelas do banco de dados
+\d [tabela] - describe da tabela
+
+\c [banco de dados] conecta a um banco de dados
+
+\z 
+
+
+Para executar um arquivo contendo instruções SQL utilizar o 
+seguinte comando:
+==================================================================
+psql -f file-with-query.sql your-database 

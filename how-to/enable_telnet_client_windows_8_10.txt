@@ -1,0 +1,12 @@
+Para instalar ou ativar o telnet em uma maquina proceda da seguinte forma: (Windows 8+)
+
+
+1. Execute o prompt de comando como administrador
+
+2. Execute o comando abaixo:
+
+	dism /online /Enable-Feature /FeatureName:TelnetClient
+	
+	Obs. a execuacao do programa deve demorar um pouco.
+	
+Referencia: https://www.rootusers.com/how-to-enable-the-telnet-client-in-windows-10/	

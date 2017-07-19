@@ -1,0 +1,113 @@
+Solu��o para o problema OutOfMemory: PermGen Space.
+Conforme texto abaixo, alterar o arquivo standalone.conf.bat do diretorio [JBoss instalation path]/bin:
+
+rem # JVM memory allocation pool parameters - modify as appropriate.
+rem set "JAVA_OPTS=-Xms64M -Xmx512M -XX:MaxPermSize=256M" ==> original
+set "JAVA_OPTS=-Xms64M -Xmx512M -XX:PermSize=64m -XX:MaxPermSize=128m" ==> novo
+
+
+Deve resolver o problema. (Igor 2013-07-17)
+
+Link: http://ghb.freshblurbs.com/blog/2005/05/19/explaining-java-lang-outofmemoryerror-permgen-space.html
+
+
+
+
+Explaining java.lang.OutOfMemoryError: PermGen space
+Posted on: May 19, 2005
+
+Most probably, a lot of Java developers have seen OutOfMemory error one time or other. However these errors 
+come in different forms and shapes. The more common is: "Exception in thread "main" java.lang.OutOfMemoryError: Java heap space" 
+and indicates that the Heap utilization has exceeded the value set by -Xmx. This is not the only error message, of this type, however.
+
+One more interesting flavor of the same error message, less common but hence even more troublesome is: "java.lang.OutOfMemoryError: PermGen space". 
+Most of the memory profiler tools are unable to detect this problem, so it is\ even more troublesome and therefore - interesting.
+
+To understand this error message and fix it, we have to remember that, for optimized, more efficient garbage-collecting Java Heap 
+is managed in generations - memory segments holding objects of different ages. Garbage collection algorithms in each generation are different. 
+Objects are allocated in a generation for younger objects - the Young Generation, and because of infant mortality most objects die there. 
+When the young generation fills up it causes a Minor Collection. Assuming high infant mortality, minor collections are garbage-collected frequently. 
+Some surviving objects are moved to a Tenured Generation. When the Tenured Generation needs to be collected there is a Major Collection that 
+is often much slower because it involves all live objects. Each generation contains variables of different length of life and 
+different GC policies are applied to them.
+
+There is a third generation too - Permanent Generation. The permanent generation is special because it holds meta-data describing user 
+classes (classes that are not part of the Java language). Examples of such meta-data are objects describing\ classes and methods and they 
+are stored in the Permanent Generation. Applications with large code-base can quickly fill up this segment of the heap which will cause 
+java.lang.OutOfMemoryError: PermGen no matter how high your -Xmx and how much memory you have on the machine.
+
+Sun JVMs allow you to resize the different generations of the heap, including the permanent generation. On a Sun JVM (1.3.1 and above)
+ you can configure the initial permanent generation size and the maximum permanent generation size.\ \ To set a new initial size on 
+ Sun JVM use the -XX:PermSize=64m option when starting the virtual machine. To set the maximum permanent generation size 
+ use -XX:MaxPermSize=128m option. If you set the initial size and maximum size to equal values you may be able to avoid some 
+ full garbage collections that may occur if/when the permanent generation needs to be resized. The default values differ from among 
+ different versions but for Sun JVMs upper limit is typically 64MB.
+
+Some of the default values for Sun JVMs are listed below.
+
+JDK 1.3.1_06	 Initial Size	 Maximum Size
+Client JVM	 1MB	 32MB
+Server JVM	 1MB	 64MB
+JDK 1.4.1_01	 Initial Size	 Maximum Size
+Client JVM	 4MB	 64MB
+Server JVM	 4MB	 64MB
+JDK 1.4.2	 Initial Size	 Maximum Size
+Client JVM	 4MB	 64MB
+Server JVM	 16MB	 64MB
+JDK 1.5.0	 Initial Size	 Maximum Size
+Client JVM	 8MB	 64MB
+Server JVM	 16MB	 64MB
+
+Following is a JSP code you can use to monitor memory utilization in different generations (including PermGen):
+
+<%@ page import="java.lang.management.*" %>
+<%@ page import="java.util.*" %>
+<html>
+<head>
+<title>JVM Memory Monitor</title>
+</head>
+ 
+<body>
+<%
+Iterator iter = ManagementFactory.getMemoryPoolMXBeans().iterator();
+while (iter.hasNext()) {
+MemoryPoolMXBean item = (MemoryPoolMXBean) iter.next();
+%>
+ 
+<table border="0" width="100%">
+<tr><td colspan="2" align="center"><h3>Memory MXBean</h3></td></tr>
+<tr><td width="200">Heap Memory Usage</td><td>
+<%=ManagementFactory.getMemoryMXBean().getHeapMemoryUsage()%>
+</td></tr>
+ 
+<tr>
+<td>Non-Heap Memory Usage</td>
+<td><%=ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage()%></td>
+</tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr><td colspan="2" align="center"><h3>Memory Pool MXBeans</h3></td></tr>
+<%
+Iterator iter = ManagementFactory.getMemoryPoolMXBeans().iterator();
+while (iter.hasNext()) {
+MemoryPoolMXBean item = (MemoryPoolMXBean) iter.next();
+%>
+<tr><td colspan="2">
+<table border="0" width="100%" style="border: 1px #98AAB1 solid;">
+<tr><td colspan="2" align="center"><b><%= item.getName() %></b></td></tr>
+<tr><td width="200">Type</td><td><%= item.getType() %></td></tr>
+<tr><td>Usage</td><td><%= item.getUsage() %></td></tr>
+<tr><td>Peak Usage</td><td><%= item.getPeakUsage() %></td></tr>
+<tr><td>Collection Usage</td><td><%= item.getCollectionUsage() %></td></tr>
+</table>
+</td></tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<%
+}
+%>
+ 
+</table>
+</body>
+</html>
+
+As of JBoss v3.2.8/4.0.2, the ServerInfo MBean registered under the name jboss.system:type=ServerInfo has been enhanced 
+with a new operation listMemoryPools(boolean fancy) that presents information about the memory pools managed by the JVM.
