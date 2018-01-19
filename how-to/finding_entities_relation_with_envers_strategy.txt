@@ -1,0 +1,5 @@
+In fact, the problem can be solved by handling relation not found gracefully. For instance, the strategy to look up relation could be:
+1. Look up related entity with the max revision number equal or less than the targeted entity's revision number.
+2. If not found, look up related entity with the min revision number larger than the targeted entity's revision number.
+3. If not found, look up related entity in "current" version.
+4. If not found, return null or empty entity with id field populated.

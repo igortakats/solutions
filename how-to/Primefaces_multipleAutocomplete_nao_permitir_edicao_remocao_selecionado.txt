@@ -1,0 +1,14 @@
+Na visualização da transferência, apesar de marcar como disabled o componente, o sinal "X" para remoção
+do item continua ativo e remove do container apesar de não removê-lo do banco de dados. Para resolver o problema 
+foi desenvolvido o componente abaixo para substituir o componente "Autocomplete" Primefaces na visualização. 
+
+
+<h:panelGroup layout="block" styleClass="ui-autocomplete ui-autocomplete-multiple">
+    <h:panelGroup layout="block" styleClass="ui-autocomplete-multiple-container ui-widget ui-inputfield ui-corner-all">
+        <ui:repeat value="#{bean.values}" var="value">
+            <h:panelGroup layout="block" styleClass="ui-autocomplete-token ui-state-active ui-corner-all">
+                <h:outputText styleClass="ui-autocomplete-token-label" value="#{value}"/>
+            </h:panelGroup>
+        </ui:repeat>
+    </h:panelGroup>
+</h:panelGroup>
