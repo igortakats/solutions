@@ -1,0 +1,7 @@
+Para setar o default-encoding no eclipse faça o seguinte:
+
+1. Edite o arquivo eclipse.ini
+2. No final do arquivo coloque o seguinte conteúdo:
+   -Dfile.encoding=UTF-8
+
+Reinicie o Eclipse.
