@@ -1,0 +1,17 @@
+Enabling gzip compression in JBoss 7.1.1
+
+In a web request ‘data transfer time’ takes most of the time. Enabling gzip compression at server level, improves performance with minimal load at server level. Note that only text data can be compressed. Since images are already compressed, don’t enable them. All modern browsers, support the decompression of gzip.
+
+Configure the following in standalone.xml
+
+<system-properties>
+
+<property name="org.apache.coyote.http11.Http11Protocol.COMPRESSION" value="on"/>
+
+<property name="org.apache.coyote.http11.Http11Protocol.COMPRESSION_MIME_TYPES" value="text/javascript,text/css,text/html,application/xml,application/json"/>
+
+</system-properties>
+
+The transferred data size reduces up to 85%.
+
+That’s all. No change required in your server code.

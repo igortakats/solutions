@@ -1,4 +1,4 @@
-Backup:
+ackup:
 
 pg_dump -i -h 10.72.250.199 -p 5432 -U postgres -F c -b -v -f "c:\igor\db\sap_bkp.dmp" grtp
 
