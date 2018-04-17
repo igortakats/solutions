@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by Razor7689 (http://jsbin.com/yaqaho/6/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width">
+  <title>No Back Please</title>
+
+<style id="jsbin-css">
+body
+{
+  background-color: #0799C8;
+  color: #F2F2F2;
+  font-family: calibri;
+}
+
+.message
+{
+  font-size: 18px;
+  font-weight: normal;
+}
+
+input, textarea
+{
+  border: 1px solid #CCCCCC;
+  width: 200px;
+  height: 22px;
+  margin-bottom: 10px;
+}
+
+textarea
+{
+  resize: none;
+  height: 150px;
+}
+</style>
+</head>
+<body>
+
+  <p class="message">
+    Hi there, 
+    This page is running with the script which will not allow you to go back.
+  </p>
+    
+  <p class="message">
+    Backspace is also disabled but it will work in HTML form elements. Try editing in following controls.
+  </p>
+  
+  <div>
+    <input type="text" />
+  </div>
+  <div>
+    <input type="text" />
+  </div>
+  <div>
+    <textarea></textarea>
+  </div>
+  
+  <p class="message">So yeah, you need to kill this tab because there is <b>No Way Out!!!!</b> (#__#)</p>
+  
+//===> Codigo que inibe backspace
+  
+<script>
+(function (global) {
+
+	if(typeof (global) === "undefined")
+	{
+		throw new Error("window is undefined");
+	}
+
+    var _hash = "!";
+    var noBackPlease = function () {
+        global.location.href += "#";
+
+		// making sure we have the fruit available for juice....
+		// 50 milliseconds for just once do not cost much (^__^)
+        global.setTimeout(function () {
+            global.location.href += "!";
+        }, 50);
+    };
+	
+	// Earlier we had setInerval here....
+    global.onhashchange = function () {
+        if (global.location.hash !== _hash) {
+            global.location.hash = _hash;
+        }
+    };
+
+    global.onload = function () {
+        
+		noBackPlease();
+
+		// disables backspace on page except on input fields and textarea..
+		document.body.onkeydown = function (e) {
+            var elm = e.target.nodeName.toLowerCase();
+            if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+                e.preventDefault();
+            }
+            // stopping event bubbling up the DOM tree..
+            e.stopPropagation();
+        };
+		
+    };
+
+})(window);
+</script>
+<script src="http://static.jsbin.com/js/render/edit.js?4.1.4"></script>
+<script>jsbinShowEdit && jsbinShowEdit({"static":"http://static.jsbin.com","root":"http://jsbin.com"});</script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-1656750-34', 'auto');
+ga('require', 'linkid', 'linkid.js');
+ga('require', 'displayfeatures');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
