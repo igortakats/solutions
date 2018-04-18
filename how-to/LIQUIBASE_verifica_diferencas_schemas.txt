@@ -1,0 +1,43 @@
+Liquibase
+=================================================================================================================
+
+1. Verifica diferenças
+-----------------------------------------------------------------------------------------------------------------
+./liquibase --driver=org.postgresql.Driver \
+        --url=jdbc:postgresql://fedora.linux:5432/dbgrtp \
+        --username=usugrtp \
+        --password=11111 \
+    diff \
+        --referenceUrl=jdbc:postgresql://sap01:5432/dbgrtp \
+        --referenceUsername=usugrtp \
+        --referencePassword=11111
+
+
+2.	liquibase.properties
+-----------------------------------------------------------------------------------------------------------------
+classpath=./lib/postgresql-42.2.1.jar
+driver=org.postgresql.Driver
+url=jdbc:postgresql://fedora.linux:5432/dbgrtp
+username=usugrtp
+password=11111
+referenceUrl=jdbc:postgresql://sap01:5432/dbgrtp
+referenceUsername=usugrtp
+referencePassword=11111
+changeLogFile=diff.xml
+
+
+3. Cria changelog:
+-----------------------------------------------------------------------------------------------------------------
+./liquibase diffChangeLog
+
+
+4. Cria sql das diferenças:
+-----------------------------------------------------------------------------------------------------------------
+./liquibase updateSQL > update.sql
+
+
+5. Cria RollBack:
+-----------------------------------------------------------------------------------------------------------------
+./liquibase futureRollbackSQL > rollback.sql
+
+=================================================================================================================
