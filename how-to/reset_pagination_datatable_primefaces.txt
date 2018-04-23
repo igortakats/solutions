@@ -1,0 +1,49 @@
+Resetar a paginação no Primefaces via MBean.
+===========================================================================================================
+FacesContext.getCurrentInstance().getViewRoot().findComponent("my_form_id:my_table_id"); 
+dataTable.reset();
+
+Resetar a paginação no Richfaces via MBean.
+===========================================================================================================
+.
+.
+.
+						<rich:dataScroller for="tabelaAplicacoes" 
+										   maxPages="10"
+										   render="panelDataHora perfilCadastroForm:aplicacoesFuncoes" 
+										   fastControls="hide"  
+===>								   binding="#{perfilUsuarioMBean.datascroller}"
+										   page="#{perfilUsuarioMBean.resetPage}">
+						</rich:dataScroller>
+.
+.
+.
+            
+No MBean:
+=========
+.
+.
+.
+private UIDataScroller datascroller;  
+.
+.
+.
+	public UIDataScroller getDatascroller() {  
+	 return datascroller;  
+	}  
+	  
+	public void setDatascroller(UIDataScroller datascroller) {  
+	 this.datascroller = datascroller;  
+	}  
+
+==> Método a ser chamado sempre que houver a necessidade de resetar o DataScroller:
+   ===============================================================================
+	private void resetDatascroller() {  
+	 if (datascroller != null) {  
+	 datascroller.setPage(1);  
+	 }  
+	} 
+  .
+  .
+  .
+  
