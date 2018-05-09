@@ -7,3 +7,5 @@ CREATE TRIGGER aud_guiaremocao
   ON guiaremocao
   FOR EACH ROW
   EXECUTE PROCEDURE aud_update_guiaremocao();
+  
+  --teste
