@@ -1,0 +1,21 @@
+/**
+  Utilizado principalmente para formatacoes especiais tipo CEP ou
+  outra qualquer. Para numeros, valores utilize NumberFormat.
+  Existe tambem a API Stella da Caelum para diversos formatos mais
+  usados no Brasil, alem de outras funcoes. Ver em: 
+  https://github.com/caelum/caelum-stella.git
+**/
+
+private static String format(String pattern, Object value) {
+
+    MaskFormatter mask;
+    
+    try { 
+      mask = new MaskFormatter(pattern); 
+      mask.setValueContainsLiteralCharacters(false); 
+      return mask.valueToString(value); 
+      
+    } catch (ParseException e) { 
+      throw new RuntimeException(e); 
+    } 
+} 
