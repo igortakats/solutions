@@ -1,0 +1,107 @@
+Things to know before deleting temporary, cache and log files in  WebSphere Application Server 
+
+
+Kumaran Nathan | Feb 16 2015 | Comments (18) | Visits (131609)  12 people like this 
+  
+WebSphere Application Server uses multiple temporary locations for many reasons. This blog explains the most commonly used temporary files, why they are used and when they can be removed. This blog will also explain the files and directories that can be removed under the profile direction with caution. 
+  
+Important: 
+  
+Be careful in deleting any temporary, cache and log files in WebSphere Application Server! 
+  
+Before making any changes to the environment , take a backup of the profile. It can be a tape backup, using the backupconfig tool, or using the manageprofile -backupProfile option. 
+  
+profile_root example: C:/WebSphere/AppServer/profiles/profile_name 
+install_root example: C:/WebSphere/Appserver 
+  
+  
+Let's describe the different files and their locations: 
+  
+profile_root/config/temp 
+Usage: The temp files in the config directory might be used for file transfer during the synchronization process and for other purposes. 
+  
+Caution: The configuration files can be corrupted if they are removed during synchronization or other operations. To avoid this problem, make sure that you stop the deployment process before you remove the config/temp files. 
+  
+Why remove these files?: Sometimes non-root users might not have permission to read the files under the temp directory, for example, if it was created by other users. Also, sometimes the files under the config/temp directory might stay there forever and cause sync and start up issues. 
+  
+profile_root/wstemp 
+Usage: wstemp is a workspace temporary directory. Any changes that you make to the configuration are stored in the wstemp directory temporarily. For example, if you are changing the heap size for an application server, the change is stored in the wstemp location until you save the changes. The concept is same for any administrative client, such as the Integrated solution console, wsadmin or JMX, that you use to make the changes. 
+  
+Caution: The WebSphere Application Server administrative console stores a preferences.xml file in install_root/wstemp/<workspace_id>. This file contains user preferences on administrative console layout and actions. It is created when you log onto the administrative console. If you remove this file, you lose the user preferences; however,  the preferences can be created again the next time you log onto the administrative console. 
+  
+Do not delete the wstemp files when the server is running (especially deployment manager or node agent servers). This approach can cause unexpected results. Also, do not delete the files when you are unsure about the changes that you made to the configuration. Save any pending changes, stop the deployment manager or node agent, which depends on whether you are removing the dmgr wstemp or node wstemp, and then delete the wstemp files. 
+  
+Why remove these files?: Files in the profile_root/wstemp directory can be removed. Restart the server process after removal. Because the directory is  used by multiple clients, some times you might see multiple files and subdirectories left behind in this directory. For example, when you use the ConfigService MBean to make changes to configuration and you do not discard the session in the code, this directory will never get deleted. Another reason is corruption in the workspace. Corruption can happen when multiple users make changes to the same configuration at the same time. 
+  
+profile_root/temp 
+Usage: The temp directory is used by multiple WebSphere components. Two good examples are compiled Java ServerPages (JSP) files and web service cache files. Compiled JSP class files (servlets) are stored in this location. The directory might get regenerated when you invoke the JSP again. However, you might experience a performance issue when you invoke the JSP for the very first time after the JSP compiled files have been removed. 
+  
+Caution:  Be cautious if you have a web services application deployed on the node. The wscache.xml is generated during the deployment process and stored under the temp directory. You have to redeploy the web service application to generate the wscache.xml again. You may experience some performance issue with large and complicate webservices application 
+  
+Why remove these files?: Corrupted JSP files or any non-root permission issues might cause the server start up issue. 
+  
+profile_root/configuration 
+Usage: This directory is used by OSGI framework to cache WebSphere Application Server Java archive (JAR) files data. The OSGI framework is used to manage class loading and relationships between server component bundles. 
+  
+Caution: Do not remove this directory unless requested by IBM. Files under the configuration folder can be regenerated using the osgiCfgInit command. 
+  
+Why remove these files?: You cannot start the server due to permissions issue in the directory. You might encounter the server start issue after an interim fix or fix pack installation. Never delete the directory; just run the profile_root/bin/osgiCfgInit command. 
+  
+/tmp/javasharedresources 
+Default Windows location: C:\Documents and Settings\user_name\Local Settings\Application Data\javasharedresources 
+  
+Usage: IBM Software Development Kits (SDK) can share classes between Java virtual machine (JVM)  processes starting with J2SE 5.0. This feature improves performance because class byte code needs to be loaded only once. Specifically, server start up time can be improved. Class byte code is loaded into a shared cache. This cache is then accessed by multiple JVMs to run the class bytecode. 
+  
+Caution:  Do not delete this directory manually unless requested by IBM. If you want to clean up the shared java resources, run the profile_root/bin/clearclasscache command. 
+  
+Why remove these files?: After an upgrade, it is possible that the class caches are still holding onto previous versions of classes. It is also possible that the caches became corrupted. The server might fail to initialize if the cache is corrupted. 
+  
+profile_root/tranlog 
+Usage: Within this directory, there is the cell_name/node_name/server_name/transaction/tranlog and cell_name/node_name/server_name/transaction/partnerlog subdirectories. The tranlog subdirectory contains all of the files that hold record details of transactions that are managed by WebSphere Application Server, in particular, the current transition state. The partnerlog subdirectory contains files that hold information on resources that are involved in a transaction. The partnerlog subdirectory is important in a recovery scenario to allow WebSphere Application Server to re-create a resource for recovery after the server is recycled. 
+  
+Caution - Important! Never delete these subdirectories in a production environment. If you delete the log files, the processes might not progress or might not complete an outstanding transaction. You might encounter critical data integrity issue, database corruption, pending transaction might never get completed, and so on. 
+  
+Why remove these files?: Never delete the files in production. If the server fails to start due to failed transaction (only in a test or development environment) and you want a quick solution to move on, take a backup of the subdirectories and then purge them. 
+  
+profille_root/logs/ffdc 
+Usage: FFDC stands for "First Failure Data Capture." The first failure data capture (FFDC) feature preserves the information that is generated from a processing failure and dumps more information about the problem in the FFDC log file. 
+  
+Caution: Although it will not cause an impact, try to not to remove the directory when the servers are running. 
+  
+Why remove these files:  If the file size grows more than the JVM can handle, the server might fail to start. This directory can be safely removed. 
+Note: The presence of these messages does not always indicate a problem. 
+  
+profile_root/logs/server_name 
+Usage: By default, the server JVM log, process log, server.pid  and trace files are stored in this location. 
+  
+Caution: Do not remove the files when the server is running especially the server.pid file. Deleting the .pid file is equivalent to killing the server process. 
+  
+Why remove these files?:  If you see the file size grow, delete the directory after stopping the server. 
+  
+profile_root/logs/nodeagent 
+Usage: By default, the node agent server JVM log, process log, monitor.state, server.pid, and trace files are stored in this location. 
+  
+Caution: You can delete any files in this directory except the monitor.state file. The node agent stores the application server name, pid and the status of the application server in the monitor.state file to monitor the server. 
+  
+Why remove these files?:  If you see the file size grow, delete the directory (except the monitor.state file) after stopping the node agent server. 
+  
+profile_root/dmgr 
+Usage: By default, the server JVM log, process log, server.pid and trace files are stored in the location. 
+  
+Caution: Do not remove the files when the server is running. 
+  
+Why remove these files?:  If you see the file size grow, delete the directory after stopping the deployment manager server. 
+  
+install_root/logs 
+Usage: Until V7.0, the installation information is stored in this location. This directory contains important information about the product installation (V7 or earlier), profile creation, and other upgrade/installation information. 
+  
+Caution: The IBM Support team might request this directory any time to debug an installation issue. 
+  
+Why remove these files?: There is not any value in removing this directory. 
+  
+profile_root/config/backup 
+Usage: During the addNode process, the present node configuration is backed up and stored in this location. These files are used later when you decide to remove the node from deployment manager cell. 
+  
+Caution:  If you remove this directory, you can never remove the node from the deployment manager and get your old configuration back. 
+  
+Why remove these files?: There is not any value in removing this directory. 
