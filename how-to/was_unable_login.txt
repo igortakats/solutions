@@ -1,0 +1,39 @@
+Unable to Login to WebSphere Console after enabling LDAP Security
+Technote (troubleshooting)
+
+Problem(Abstract)
+Enabling Global Security in WebSphere as part of the Application Server Security setup the Administrator is no longer able to log in to the WebSphere Administrative Console after restarting WebSphere services.
+
+Cause
+The WebSphere Security mechanism is not able to validate any user credentials due to incorrect configuration of the Global Security settings.
+
+Environment
+This document only applies to customers using IBM WebSphere version 6.0.x or 6.1 as their Application Server. If there is no active connection to the Directory Server configured in WebSphere, this issue may occur as well.
+
+Resolving the problem
+To temporarily disable Global Security in WebSphere perform the following tasks.
+
+
+-Stop all WebSphere services if they are running. If the services will not stop, this is likely due to the Global Security being enabled, you will need to restart the server after making these changes.
+
+-Locate and edit the Security.xml files in the following directories:
+
+\..\WebSphere\AppServer\profiles\<maximo_profile_name>\config\cells\<cell_name>\security.xml
+
+and
+
+\..\WebSphere\AppServer\profiles\<dmgr_profile_name>\config\cells\<cell_name>\security.xml
+
+In a text editor, on line 2 of the XML file, locate the following text:
+useLocalSecurityServer="true" useDomainQualifiedUserNames="false" enabled="true" cacheTimeout="600"
+
+Change both useLocalSecurityServer and enabled to "false":
+
+useLocalSecurityServer="false" useDomainQualifiedUserNames="false" enabled="false" cacheTimeout="600"
+
+Save the files then start the WebSphere Services or Restart the Server.
+
+When the WebSphere services are restarted, you will be able to access the console with any username. This allows any incorrect configurations to be changed and re-tested. 
+
+Ensure that these file changes are reverted once the issue is resolved.
+
