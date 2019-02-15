@@ -1,0 +1,7 @@
+Como duplicar uma tabela no SQL Server
+Para duplicar a estrutura e os dados de uma tabela no SQL Server, basta utilizar o operador INTO em um Select, por exemplo:
+
+SELECT * INTO NOTASCOPIA 
+   FROM NOTAS
+
+Será criada uma tabela NOTASCOPIA com os dados da tabela NOTAS e com os mesmos campos e definições.
