@@ -1,0 +1,11 @@
+Websphere_server.xml_localizacao_atualizacao_manual
+
+WebSphere Application Server configuration data is stored in XMI format in the profile configuration repository.
+
+The settings you referred to are stored in server.xml
+
+${PROFILE_HOME}/config/cells/${CELL}/nodes/${NODE}/servers/${SERVER}/server.xml
+
+Link:
+
+https://stackoverflow.com/questions/2687366/where-can-i-find-websphere-configuration-files
