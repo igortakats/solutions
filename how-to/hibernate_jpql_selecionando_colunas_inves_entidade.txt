@@ -1,0 +1,22 @@
+	@SuppressWarnings("unchecked")
+	public List<OcorrenciaRegistroVO> buscarHistorico(Long id) throws DAOException {
+		try {
+			StringBuilder jpql = new StringBuilder();
+			jpql.append("SELECT new ");
+			jpql.append(OcorrenciaRegistroVO.class.getName());
+			jpql.append(" (o.tipo.dominio, o.dataAtualizacao ,  o.usuarioAtualizacao.pessoaFisica.nome, o.usuarioAtualizacao.pessoaFisica.cpf, o.descricao) ");
+			jpql.append(" FROM ");
+			jpql.append(GtaOcorrenciaRegistroORM.class.getName());
+			jpql.append(" o ");
+			jpql.append(" where o.gta.id = :id ");
+			jpql.append(" order by o.dataAtualizacao ");
+
+			Query query = createQuery(jpql.toString());
+			query.setParameter("id", id);
+			return query.getResultList();
+		} catch (NoResultException e) {
+			throw new ObjectNotFoundDAOException(e);
+		} catch (RuntimeException e) {
+			throw new DAOException(e);
+		}
+	}
