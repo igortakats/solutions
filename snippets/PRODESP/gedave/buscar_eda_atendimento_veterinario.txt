@@ -1,0 +1,42 @@
+	/**
+		A partir de um CPF, procura o EDA de Atendimento da Pessoa Fisica
+	**/
+	
+	public Long findEDAVeterinario(String cpfCNPJ) throws DAOException {
+		
+		if (StringUtils.isEmpty(cpfCNPJ)) {
+			throw new DAOException("CPF/CNPJ não informado");
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("SELECT VWEDA.ID_EDA ");
+		sb.append("FROM   TB_CDA_PESSOA_FISICA PF ");
+		sb.append("JOIN   TB_CDA_ENDERECO ENDE ON PF.ID_ENDERECO_RESIDENCIAL = ENDE.IDENT  ");
+		sb.append("JOIN   TB_CDA_MUNICIPIO_IBGE MUN ON ENDE.ID_MUNICIPIO_IBGE = MUN.IDENT   ");
+		sb.append("JOIN   VW_CDA_MUNICIPIO_EDA_IDA_UDA VWEDA ON VWEDA.ID_MUNICIPIO_IBGE = ENDE.ID_MUNICIPIO_IBGE   ");
+		sb.append("WHERE ");
+		sb.append("PF.COD_CPF = :cpfCNPJ ");
+		sb.append("order by VWEDA.NOME_MUN ");
+		
+		Query query =  super.getEntityManager().createNativeQuery(sb.toString());
+
+		query.setParameter("cpfCNPJ", cpfCNPJ);
+		
+		Integer idEDA = null;
+
+		try {
+			
+			idEDA = (Integer)query.getSingleResult();
+
+			if (idEDA == null)
+				throw new ObjectNotFoundDAOException();
+
+		} catch (NoResultException e) {
+			throw new ObjectNotFoundDAOException(e);
+		} catch (RuntimeException e) {
+			throw new DAOException(e);
+		}
+		
+		return idEDA.longValue();
+	}

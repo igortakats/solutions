@@ -4,4 +4,4 @@ Para duplicar a estrutura e os dados de uma tabela no SQL Server, basta utilizar
 SELECT * INTO NOTASCOPIA 
    FROM NOTAS
 
-Será criada uma tabela NOTASCOPIA com os dados da tabela NOTAS e com os mesmos campos e definições.
+Ser� criada uma tabela NOTASCOPIA com os dados da tabela NOTAS e com os mesmos campos e definições.
